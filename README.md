@@ -58,8 +58,5 @@ Education and Testing Purposes Only: This script is intended for educational pur
 Contributing
 Feel free to contribute to this repository by creating pull requests for improvements or reporting issues in the issue tracker.
 
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 Acknowledgments
 This script was inspired by the need to automate Windows activation in KMS-supported environments and is based on publicly available information about KMS activation methods. We thank the open-source community for their contributions to similar projects.
