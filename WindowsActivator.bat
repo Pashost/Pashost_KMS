@@ -1,4 +1,13 @@
 @echo off
+:: Check if the script is running with administrator privileges
+net session >nul 2>&1
+if %errorlevel% neq 0 (
+    echo This script requires administrator privileges. Re-running as administrator...
+    :: Re-launch the script with administrator privileges
+    powershell -Command "Start-Process cmd -ArgumentList '/c, %~s0' -Verb RunAs"
+    exit /b
+)
+
 :: Display Windows version and edition information
 echo Windows Version Information:
 wmic os get Caption, Version /value
@@ -74,6 +83,10 @@ if %errorlevel%==0 (
         set "KMS_KEY=92NFX-8DJQP-P6BBQ-THF9C-7CG2H"
     ) else if "%os_caption%"=="Windows 10 Enterprise N LTSC 2019" (
         set "KMS_KEY=92NFX-8DJQP-P6BBQ-THF9C-7CG2H"
+    ) else if "%os_caption%"=="Windows 10 Home" (
+        set "KMS_KEY=TX9XD-98N7V-6WMQ6-BX7FG-H8Q99"
+    ) else if "%os_caption%"=="Windows 10 Edition" (
+        set "KMS_KEY=YTMG3-N6DKC-DKB77-7M9GH-8HVX7"
     )
 
     :: Run activation commands if KMS key is defined
