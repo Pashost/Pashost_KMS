@@ -2,8 +2,8 @@
 :: Display Windows version and edition information
 echo Windows Version Information:
 wmic os get Caption, Version /value
-
 echo.
+
 :: Check Windows activation status
 echo Checking Activation Status...
 wmic path SoftwareLicensingProduct where "PartialProductKey is not null" get LicenseStatus /value | findstr /C:"LicenseStatus=1" >nul
@@ -16,8 +16,18 @@ if %errorlevel%==0 (
     echo Attempting to activate Windows...
 
     :: Get OS Caption with error handling
-    for /f "tokens=2 delims==" %%i in ('wmic os get Caption /value ^| find "="') do set "os_caption=%%i"
-    
+    echo Retrieving OS Caption...
+    for /f "tokens=2 delims==" %%i in ('wmic os get Caption /value') do (
+        set "os_caption=%%i"
+        echo OS Caption Retrieved: %%i
+    )
+
+    :: Check if os_caption is set
+    if not defined os_caption (
+        echo Error: Failed to retrieve OS Caption.
+        goto :eof
+    )
+
     echo Detected OS Caption: "%os_caption%"
 
     :: Select the KMS key based on OS version
