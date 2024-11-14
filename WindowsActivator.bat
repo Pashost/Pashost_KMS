@@ -21,6 +21,7 @@ if %errorlevel%==0 (
     echo Attempting to activate Windows...
 
     :: Get the Windows version caption
+    set os_caption=""
     for /f "tokens=2 delims==" %%i in ('wmic os get Caption /value') do (
         set os_caption=%%i
         set os_caption=!os_caption: =!
@@ -81,7 +82,14 @@ if %errorlevel%==0 (
     echo Using KMS Key: !KMS_KEY!
 
     :: Run the activation commands with delays between them
+    echo Running activation commands...
     powershell -Command "Start-Process cmd -ArgumentList '/c slmgr /ipk !KMS_KEY! && timeout /t 5 && slmgr /skms kms.digiboy.ir && timeout /t 5 && slmgr /ato && echo Activation commands executed. && pause' -Verb RunAs"
+
+    :: Check for error during activation
+    if %errorlevel% neq 0 (
+        echo Error: Activation process failed with error code %errorlevel%.
+        exit /b
+    )
 )
 
 :: Pause to keep the batch file window open until the user presses a key
