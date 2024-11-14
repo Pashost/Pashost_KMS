@@ -83,7 +83,7 @@ if %errorlevel%==0 (
 
     :: Run the activation commands with delays between them
     echo Running activation commands...
-    powershell -Command "Start-Process cmd -ArgumentList '/c slmgr /ipk !KMS_KEY! && timeout /t 5 && slmgr /skms kms.digiboy.ir && timeout /t 5 && slmgr /ato && echo Activation commands executed. && pause' -Verb RunAs"
+    powershell -Command "try {Start-Process cmd -ArgumentList '/c slmgr /ipk !KMS_KEY! && timeout /t 5 && slmgr /skms kms.digiboy.ir && timeout /t 5 && slmgr /ato && echo Activation commands executed.' -Verb RunAs} catch {Write-Error 'Activation failed: $_'; exit 1}"
 
     :: Check for error during activation
     if %errorlevel% neq 0 (
