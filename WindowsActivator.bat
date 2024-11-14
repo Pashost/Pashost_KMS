@@ -18,7 +18,7 @@ if %errorlevel%==0 (
     echo.
     echo Attempting to activate Windows...
 
-    :: Select the KMS key based on the version
+    :: Get the Windows version caption
     for /f "tokens=2 delims==" %%i in ('wmic os get Caption /value') do (
         set os_caption=%%i
         set os_caption=!os_caption: =!
