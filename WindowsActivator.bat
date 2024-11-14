@@ -1,4 +1,6 @@
 @echo off
+setlocal enabledelayedexpansion
+
 :: Display Windows version and edition information
 echo Windows Version Information:
 wmic os get Caption, Version /value
@@ -23,6 +25,15 @@ if %errorlevel%==0 (
         set os_caption=%%i
         set os_caption=!os_caption: =!
     )
+
+    :: Check if os_caption is empty or undefined
+    if "!os_caption!"=="" (
+        echo Error: Failed to retrieve Windows version. Exiting...
+        exit /b
+    )
+
+    :: Debugging: Print the retrieved OS caption
+    echo Retrieved OS Caption: !os_caption!
 
     :: Check for each possible Windows version and assign appropriate KMS key
     if /i "!os_caption!"=="Microsoft Windows 10 Home" (
@@ -66,8 +77,11 @@ if %errorlevel%==0 (
         exit /b
     )
 
+    :: Debugging: Print the selected KMS key
+    echo Using KMS Key: !KMS_KEY!
+
     :: Run the activation commands with delays between them
-    powershell -Command "Start-Process cmd -ArgumentList '/c slmgr /ipk %KMS_KEY% && timeout /t 5 && slmgr /skms kms.digiboy.ir && timeout /t 5 && slmgr /ato && echo Activation commands executed. && pause' -Verb RunAs"
+    powershell -Command "Start-Process cmd -ArgumentList '/c slmgr /ipk !KMS_KEY! && timeout /t 5 && slmgr /skms kms.digiboy.ir && timeout /t 5 && slmgr /ato && echo Activation commands executed. && pause' -Verb RunAs"
 )
 
 :: Pause to keep the batch file window open until the user presses a key
